@@ -40,11 +40,11 @@ no match history is available). participants cannot have more than one bye.
 
 Matchups returned are in the form:
 
-```json
+```javascript
 [
   {
-    home: home_participant_id,
-    away: away_participant_id
+    'home': home_participant_id,
+    'away': away_participant_id
   },
   ...
 ]
@@ -60,14 +60,14 @@ modified median score, and seed in that order.
 
 Standings returned are in the form:
 
-```json
+```javascript
 [
   {
-    id: participant_id,
-    seed: seed,
-    wins: won_points,
-    losses: lost_points,
-    tiebreaker: modified_median_score
+    'id': participant_id,
+    'seed': seed,
+    'wins': won_points,
+    'losses': lost_points,
+    'tiebreaker': modified_median_score
   },
   ...
 ]
@@ -82,7 +82,7 @@ match history.
 
 Scores returned are in the form:
 
-```json
+```javascript
 {
   <participant_id>: modified_median_score,
   ...
@@ -93,11 +93,11 @@ Scores returned are in the form:
 
 The participants argument expects an array in the form:
 
-```json
+```javascript
 [
   {
-    id: participant_id,
-    seed: participant_seed
+    'id': participant_id,
+    'seed': participant_seed
   }
 ]
 ```
@@ -111,17 +111,17 @@ are suggested for reliability
 
 The matches argument expects an array in the form:
 
-```json
+```javascript
 [
   {
-    round: match_round,
-    home: {
-      id: home_participant_id,
-      points: home_won_points
+    'round': match_round,
+    'home': {
+      'id': home_participant_id,
+      'points': home_won_points
     },
-    home: {
-      id: away_participant_id,
-      points: away_won_points
+    'home': {
+      'id': away_participant_id,
+      'points': away_won_points
     }
   }
 ]
