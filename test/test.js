@@ -57,13 +57,13 @@ var even = {
 }
 
 var oddModifiedMedian = twoPerRound.getModifiedMedianScores(2, odd.participants, odd.matches)
-var expectedOddModifiedMedian = { '1': 0, '2': 0, '3': 0 }
+var expectedOddModifiedMedian = { '1': 1, '2': 1, '3': 0 }
 var evenModifiedMedian = onePerRound.getModifiedMedianScores(3, even.participants, even.matches)
 var expectedEvenModifiedMedian = { 'ID 1': 1, 'ID 2': 3, 'ID 3': 1, 'ID 4': 1 }
 var oddStandings = twoPerRound.getStandings(2, odd.participants, odd.matches)
 var expectedOddStandings = [
-  { id: '2', seed: 1050, wins: 1, losses: 1, tiebreaker: 0 },
-  { id: '1', seed: 1000, wins: 1, losses: 1, tiebreaker: 0 },
+  { id: '2', seed: 1050, wins: 1, losses: 1, tiebreaker: 1 },
+  { id: '1', seed: 1000, wins: 1, losses: 1, tiebreaker: 1 },
   { id: '3', seed: 950, wins: 0, losses: 0, tiebreaker: 0 }
 ]
 var evenStandings = onePerRound.getStandings(3, even.participants, even.matches)
