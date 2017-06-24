@@ -1,6 +1,7 @@
 // Doesn't account for forfeits yet, still debating on that implementation
 // for multi-point scenarios
-function getModifiedMedianScores(maxPerRound, currentRound, participants, matches) {
+function getModifiedMedianScores(
+  maxPerRound, currentRound, participants, matches) {
   matches = matches.filter(match => match.round < currentRound)
   var mappings = participants.reduce((acc, participant) => {
     acc.push(matches.filter(match => {
@@ -167,7 +168,7 @@ function getMatchups(maxPerRound, currentRound, participants, matches) {
   return matchups
 }
 
-module.exports = (participant, series, options) => {
+module.exports = (options) => {
   if (!options) {
     options = {}
   }
