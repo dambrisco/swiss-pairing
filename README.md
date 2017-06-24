@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/dambrisco/swiss-pairing.svg)](https://travis-ci.org/dambrisco/swiss-pairing "View this project's build information")
 [![Dependency Status](https://img.shields.io/david/dambrisco/swiss-pairing.svg)](https://david-dm.org/dambrisco/swiss-pairing "Check this project's dependencies")
 
-pug-tree is a tiny library design to build nested objects of templating functions from a given directory of [pug template](https://github.com/pugjs/pug) files.
+swiss-pairing is a tiny swiss pairing library with basic deterministic functionality
 
 ## Installation
 
