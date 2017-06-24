@@ -1,0 +1,31 @@
+{
+  "name": "swiss-pairing",
+  "version": "1.0.0",
+  "description": "Tiny swiss pairing library with basic deterministic functionality",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dambrisco/swiss-pairing.git"
+  },
+  "keywords": [
+    "swiss",
+    "pairing",
+    "pairings",
+    "tournament",
+    "bracket",
+    "group",
+    "stage",
+    "groupstage"
+  ],
+  "author": "Dan Ambrisco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dambrisco/swiss-pairing/issues"
+  },
+  "homepage": "https://github.com/dambrisco/swiss-pairing#readme",
+  "dependencies": {
+  }
+}
