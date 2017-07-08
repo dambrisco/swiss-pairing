@@ -27,5 +27,6 @@
   },
   "homepage": "https://github.com/dambrisco/swiss-pairing#readme",
   "dependencies": {
+    "edmonds-blossom": "^1.0.0"
   }
 }

@@ -9,15 +9,21 @@ swiss-pairing is a tiny swiss pairing library with basic deterministic functiona
 
 * `npm install --save swiss-pairing`
 * `require('swiss-pairing')(options)`
-  * `options` contains configurable variables, currently only
-  `maxPointsPerRound` (usually 1, sometimes 2)
+  * `options` contains the following variables:
+    * `maxPointsPerRound` - the number of points a participant can score in a
+      round - usually 1 or 2
+      * default: `1`
+    * `rematchWeight` - rematch penalty weight
+      * default: `100`
+    * `standingPower` - the power to which standings differences should be
+      raised
+      * default: `2`
+    * `seedMultiplier` - the deterministic PRNG seed multiplier, ideally a prime
+      of at least 4 digits
+      * default: `6781`
   * See `test/test.js` for usage example
 
 ## Usage
-
-**Caveat**: This library is designed for once-through scenarios. If you want to have participants
-paired multiple times, you'll need to trim the match history passed to the
-methods as appropriate for your scenario.
 
 swiss-pairing exposes the following three methods:
 
