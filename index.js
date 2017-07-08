@@ -194,7 +194,7 @@ function shuffle(array, seed, multiplier) {
   // fast, seeded PRNG from stackoverflow
   var s = seed
   const random = () => {
-    var x = (Math.abs((((s++ * multiplier * 2) / Math.PI) % 4) - 2) - 1) * 10000
+    var x = (Math.abs((((s++ * multiplier) / Math.PI) % 4) - 2) - 1) * 10000
     return x - Math.floor(x)
   }
 
