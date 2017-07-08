@@ -85,7 +85,7 @@ function getStandings(options, round, participants, matches) {
   })
 }
 
-function getMatchups(options, id, round, participants, matches) {
+function getMatchups(options, round, participants, matches) {
   matches = matches.filter(match => match.round < round)
   var mappings = getMappings(participants, matches)
 
