@@ -213,9 +213,11 @@ module.exports = (options) => {
   options.rematchWeight = options.rematchWeight || 100
   options.standingPower = options.standingPower || 2
   options.seedMultiplier = options.seedMultiplier || 6781
+
   return {
     getModifiedMedianScores: getModifiedMedianScores.bind(null, options),
     getStandings: getStandings.bind(null, options),
     getMatchups: getMatchups.bind(null, options),
     getMappings: getMappings,
   }
+}
