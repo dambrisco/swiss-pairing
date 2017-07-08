@@ -14,12 +14,12 @@ var odd = {
   matches: [
     {
       round: 1,
-      home: { id: 2, points: 1 },
-      away: { id: 1, points: 1 }
+      home: { id: 1, points: 1 },
+      away: { id: 3, points: 1 }
     },
     {
       round: 1,
-      home: { id: 3, points: 0 },
+      home: { id: 2, points: 0 },
       away: { id: null, points: 0 }
     }
   ]
@@ -57,14 +57,14 @@ var even = {
 }
 
 var oddModifiedMedian = twoPerRound.getModifiedMedianScores(2, odd.participants, odd.matches)
-var expectedOddModifiedMedian = { '1': 1, '2': 1, '3': 0 }
+var expectedOddModifiedMedian = { '1': 1, '2': 0, '3': 1 }
 var evenModifiedMedian = onePerRound.getModifiedMedianScores(3, even.participants, even.matches)
 var expectedEvenModifiedMedian = { 'ID 1': 1, 'ID 2': 3, 'ID 3': 1, 'ID 4': 1 }
 var oddStandings = twoPerRound.getStandings(2, odd.participants, odd.matches)
 var expectedOddStandings = [
-  { id: '2', seed: 1050, wins: 1, losses: 1, tiebreaker: 1 },
   { id: '1', seed: 1000, wins: 1, losses: 1, tiebreaker: 1 },
-  { id: '3', seed: 950, wins: 0, losses: 0, tiebreaker: 0 }
+  { id: '3', seed: 950, wins: 1, losses: 1, tiebreaker: 1 },
+  { id: '2', seed: 1050, wins: 0, losses: 0, tiebreaker: 0 }
 ]
 var evenStandings = onePerRound.getStandings(3, even.participants, even.matches)
 var expectedEvenStandings = [
@@ -75,18 +75,18 @@ var expectedEvenStandings = [
 ]
 var oddMatchupsRound1 = twoPerRound.getMatchups(1, odd.participants, odd.matches)
 var expectedOddMatchupsRound1 = [
-  { home: '2', away: '1' },
-  { home: '3', away: null }
+  { home: 1, away: 3 },
+  { home: 2, away: null }
 ]
 var oddMatchupsRound2 = twoPerRound.getMatchups(2, odd.participants, odd.matches)
 var expectedOddMatchupsRound2 = [
-  { home: '2', away: '3' },
-  { home: '1', away: null }
+  { home: 1, away: 2 },
+  { home: 3, away: null }
 ]
 var evenMatchupsRound1 = onePerRound.getMatchups(1, even.participants, even.matches)
 var expectedEvenMatchupsRound1 = [
-  { home: 'ID 3', away: 'ID 4' },
-  { home: 'ID 1', away: 'ID 2' }
+  { home: 'ID 3', away: 'ID 1' },
+  { home: 'ID 4', away: 'ID 2' }
 ]
 var evenMatchupsRound2 = onePerRound.getMatchups(2, even.participants, even.matches)
 var expectedEvenMatchupsRound2 = [
