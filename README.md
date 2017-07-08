@@ -145,3 +145,7 @@ against numeric values - there are also no checks against whether or not these
 values overrun `maxPerRound` and any data that does overrun `maxPerRound` will
 likely result in strange or erroneous results from every function in this
 library
+
+## Contributors
+* [@dambrisco](https://github.com/dambrisco)
+* [@philkjacobs](https://github.com/philkjacobs)
