@@ -98,6 +98,8 @@ function getMatchups(options, round, participants, matches) {
     m.id = index++
   }
 
+  mappings = mappings.filter(m => !m.droppedOut)
+
   if(mappings.length % 2 === 1) {
     // we simulate the bye having played against every team with a bye
     // that way those teams will not get a bye again unless the matches are
@@ -180,6 +182,7 @@ function getMappings(participants, matches) {
     }, {
       id: participant.id,
       seed: participant.seed,
+      droppedOut: participant.droppedOut,
       points: 0,
       opponents: []
     }))
