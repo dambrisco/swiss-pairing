@@ -107,14 +107,12 @@ function getMatchups(options, round, participants, matches) {
     // we also want it to bias toward giving byes to teams at the bottom
     // of the standings
     mappings.push({id: index,
-      points:0,
+      points: 0,
       seed: 0,
       tiebreaker: 0,
-      opponents:mappings.filter(m => {
-        return m.opponents.filter(o => {
-          return o === null
-        }).length
-      }).map( m => {return m.id})
+      opponents: mappings.filter(m => {
+        return m.opponents.filter(o => o === null).length > 0
+      }).map(m => mapIds.get(m.id))
     })
     mapIds.set(index, null)
   }
