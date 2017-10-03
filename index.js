@@ -111,7 +111,9 @@ function getMatchups(options, round, participants, matches) {
       seed: 0,
       tiebreaker: 0,
       opponents:mappings.filter(m => {
-        return m.opponents.length < round - 1
+        return m.opponents.filter(o => {
+          return o === null
+        }).length
       }).map( m => {return m.id})
     })
     mapIds.set(index, null)
