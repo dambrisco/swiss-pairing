@@ -125,7 +125,7 @@ The matches argument expects an array in the form:
       'id': home_participant_id,
       'points': home_won_points
     },
-    'home': {
+    'away': {
       'id': away_participant_id,
       'points': away_won_points
     }
