@@ -107,6 +107,7 @@ var byeTest = {
       disbanded: false,
       droppedOut: false },
     { id: 'Team 13',
+      seed: 4183,
       disbanded: false,
       droppedOut: false },
     { id: 'Team 14',
@@ -163,7 +164,7 @@ var byeTest = {
       home: { id: 'Team 5', points: 1 },
       away: { id: 'Team 1', points: 1 } },
     { round: 1,
-      home: { id: 'Team 12', points: 0 },
+      home: { id: 'Team 12', points: 2 },
       away: { id: null, points: 0 } },
     { round: 2,
       home: { id: 'Team 7', points: 2 },
@@ -193,7 +194,7 @@ var byeTest = {
       home: { id: 'Team 13', points: 2 },
       away: { id: 'Team 1', points: 0 } },
     { round: 2,
-      home: { id: 'Team 2', points: 0 },
+      home: { id: 'Team 2', points: 2 },
       away: { id: null, points: 0 } }
   ]
 }
