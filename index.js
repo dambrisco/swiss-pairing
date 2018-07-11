@@ -27,7 +27,7 @@ function getModifiedMedianScores(options, round, participants, matches) {
   }, {}))
   var fifty = ((round - 1) * options.maxPerRound) / 2
   return Object.entries(scores).reduce((acc, [key, value]) => {
-    value.scores.sort()
+    value.scores.sort((a, b) => a - b)
     if (points[key] > fifty) {
       value.scores.shift()
     } else if (points[key] < fifty) {
