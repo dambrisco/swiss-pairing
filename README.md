@@ -1,7 +1,9 @@
 # swiss-pairing
-[![NPM version](https://img.shields.io/npm/v/swiss-pairing.svg)](https://npmjs.org/package/swiss-pairing "View this project on NPM")
-[![Build Status](https://img.shields.io/travis/dambrisco/swiss-pairing.svg)](https://travis-ci.org/dambrisco/swiss-pairing "View this project's build information")
-[![Dependency Status](https://img.shields.io/david/dambrisco/swiss-pairing.svg)](https://david-dm.org/dambrisco/swiss-pairing "Check this project's dependencies")
+
+[![NPM version](https://img.shields.io/npm/v/swiss-pairing?logo=npm)](https://npmjs.org/package/swiss-pairing "View this project on NPM")
+[![Dependency status](https://img.shields.io/librariesio/github/dambrisco/swiss-pairing?logo=librariesio)](https://libraries.io/github/dambrisco/swiss-pairing "View this project on Libraries.io")
+[![CI status](https://img.shields.io/github/actions/workflow/status/dambrisco/swiss-pairing/node.js.yml?logo=github)](https://github.com/dambrisco/swiss-pairing/actions/workflows/node.js.yml?query=branch%3Atrunk "View this project's CI run history")
+
 
 swiss-pairing is a tiny swiss pairing library with basic deterministic functionality
 
