@@ -74,8 +74,9 @@ function getStandings(options, round, participants, matches) {
     return standings
   }, []).sort((a, b) => {
     if (a.wins === b.wins) {
+      // TODO: Consider adding an Elo option that can be used as an additional sortable value
       if (a.tiebreaker === b.tiebreaker) {
-        return b.seed - a.seed
+        return a.seed - b.seed
       } else {
         return b.tiebreaker - a.tiebreaker
       }
