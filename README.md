@@ -39,7 +39,7 @@ Determines the matchups for the given round by pairing participants:
 * in order of:
   * highest standing to lowest
   * highest modified median score to lowest
-  * highest seed to lowest
+  * lowest seed to highest
 * where the highest ranked team in a pair is given the `home` side
 
 When byes are needed (in the case of an odd number of participants), they bubble
@@ -64,7 +64,7 @@ See `participants` and `matches` formats below.
 
 Determines the standings for a given round by accumulating won points and lost
 points and calculating modified median scores. Standings are ordered by wins,
-modified median score, and seed in that order.
+modified median score, and (inverse) seed in that order.
 
 Standings returned are in the form:
 
@@ -112,7 +112,7 @@ The participants argument expects an array in the form:
 
 * `participant_id` may be any value that exposes a toString method (and can
 therefore be used as a key on a javascript object)
-* `participant_seed` may be any directly sortable value, although numeric values
+* `participant_seed` may be any directly sortable unique value, although numeric values (1..N)
 are suggested for reliability
 
 ### `matches` argument
