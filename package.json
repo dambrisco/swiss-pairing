@@ -1,6 +1,6 @@
 {
   "name": "swiss-pairing",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Tiny swiss pairing library with basic deterministic functionality",
   "main": "index.js",
   "scripts": {
