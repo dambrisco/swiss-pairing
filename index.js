@@ -89,6 +89,7 @@ function getStandings(options, round, participants, matches) {
 function getMatchups(options, round, participants, matches) {
   matches = matches.filter(match => match.round < round)
   var mappings = getMappings(participants, matches)
+  mappings = mappings.filter(m => !m.droppedOut)
 
   // because ids are strings but the blossom algorithm needs integers
   // we create maps from int-to-id then set the ids to integers
@@ -98,8 +99,6 @@ function getMatchups(options, round, participants, matches) {
     mapIds.set(index, m.id)
     m.id = index++
   }
-
-  mappings = mappings.filter(m => !m.droppedOut)
 
   if(mappings.length % 2 === 1) {
     // we simulate the bye having played against every team with a bye
