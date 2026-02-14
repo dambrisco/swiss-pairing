@@ -23,11 +23,17 @@ swiss-pairing is a tiny swiss pairing library with basic deterministic functiona
     * `seedMultiplier` - the deterministic PRNG seed multiplier, ideally a prime
       of at least 4 digits
       * default: `6781`
+    * `colorWeight` - penalty weight applied to the blossom edge when both
+      candidates in a pair are due the same side (`home` or `away`). Higher
+      values make color balance a stronger pairing criterion relative to score
+      proximity. Set to `0` to disable color-aware pairing entirely and restore
+      purely score-based pairings.
+      * default: `3`
   * See `test/test.js` for usage example
 
 ## Usage
 
-swiss-pairing exposes the following three methods:
+swiss-pairing exposes the following four methods:
 
 ### getMatchups(round, participants, matches)
 
@@ -40,11 +46,32 @@ Determines the matchups for the given round by pairing participants:
   * highest standing to lowest
   * highest modified median score to lowest
   * lowest seed to highest
-* where the highest ranked team in a pair is given the `home` side
+* where the `home`/`away` side for each pair is assigned by color history (see
+  below)
+
+**Color (home/away) assignment** — applied after the blossom pairing algorithm
+has decided *who* plays *whom*, using this priority order:
+
+1. **Hard constraint**: a participant who has played the same side for the last
+   two consecutive rounds is forced to switch. If both participants in a pair
+   are simultaneously forced to the same side, the one with the larger absolute
+   color imbalance wins; the other's hard constraint is overridden.
+2. **Soft preference**: the participant with more `away` games than `home` games
+   receives `home`; the one with more `home` games receives `away`.
+3. **Tie-break**: when both participants have equal imbalances, the lower-ranked
+   participant receives `home`. This prevents top-ranked participants from
+   accumulating a home-side advantage over a long tournament.
+
+> **Breaking change from earlier versions**: prior to color tracking, `home` was
+> always assigned to the higher-ranked participant. It may now be assigned to
+> either participant based on color history. Set `colorWeight: 0` *and* be aware
+> that the post-pairing assignment still applies; callers that relied on `home`
+> as a rank signal will need to be updated.
 
 When byes are needed (in the case of an odd number of participants), they bubble
 up from the lowest to the highest ranking, (starting with the lowest seed when
-no match history is available). participants cannot have more than one bye.
+no match history is available). Participants cannot have more than one bye. BYE
+matchups always assign `home` to the active participant and `away` to `null`.
 
 Matchups returned are in the form:
 
@@ -97,6 +124,35 @@ Scores returned are in the form:
 }
 ```
 
+### getMappings(participants, matches)
+
+See `participants` and `matches` formats below.
+
+Returns the internal per-participant aggregation used by `getMatchups` and
+`getStandings`. Useful for inspecting accumulated color history.
+
+Mappings returned are in the form:
+
+```javascript
+[
+  {
+    'id': participant_id,
+    'seed': participant_seed,
+    'points': accumulated_points,
+    'opponents': [ opponent_id, ... ],
+    'colorsPlayed': [ 'home' | 'away', ... ]
+  },
+  ...
+]
+```
+
+`colorsPlayed` is ordered chronologically — the first entry is the side played
+in the earliest recorded match, and the last entry is the most recent. Color
+tracking is reliable only for tournaments that were started (and whose match
+history was recorded) with this version of the library or later; earlier match
+records used `home` to indicate the higher-ranked participant rather than the
+white-pieces holder.
+
 ### `participants` argument
 
 The participants argument expects an array in the form:
@@ -105,7 +161,8 @@ The participants argument expects an array in the form:
 [
   {
     'id': participant_id,
-    'seed': participant_seed
+    'seed': participant_seed,
+    'droppedOut': has_dropped_out  // optional, default false
   }
 ]
 ```
@@ -114,6 +171,9 @@ The participants argument expects an array in the form:
 therefore be used as a key on a javascript object)
 * `participant_seed` may be any directly sortable unique value, although numeric values (1..N)
 are suggested for reliability
+* `droppedOut` participants are excluded from matchmaking but are retained in
+  the participants list so that their prior match records can be used for
+  standings and color-history calculations
 
 ### `matches` argument
 

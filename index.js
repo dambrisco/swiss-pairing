@@ -98,6 +98,11 @@ function getMatchups(options, round, participants, matches) {
   for (var m of mappings) {
     mapIds.set(index, m.id)
     m.id = index++
+    var homesPlayed = m.colorsPlayed.filter(c => c === 'home').length
+    var awaysPlayed = m.colorsPlayed.filter(c => c === 'away').length
+    m.colorImbalance = homesPlayed - awaysPlayed
+    m.lastTwoColors = m.colorsPlayed.slice(-2)
+    m.colorDue = m.colorImbalance > 0 ? 'away' : m.colorImbalance < 0 ? 'home' : null
   }
 
   if(mappings.length % 2 === 1) {
@@ -120,6 +125,10 @@ function getMatchups(options, round, participants, matches) {
   // we shuffle the inputs to the blossom algorithm to counteract
   // any ordering biases it may have
   mappings = shuffle(mappings, round, options.seedMultiplier)
+  var colorConflict = (a, b) => {
+    if (!a.colorDue || !b.colorDue) return 0
+    return (a.colorDue === b.colorDue) ? 1 : 0
+  }
   var arr = mappings.reduce((arr, team, i, orig) => {
     var opps = orig.slice(0, i).concat(orig.slice(i + 1))
     for (var opp of opps) {
@@ -129,7 +138,8 @@ function getMatchups(options, round, participants, matches) {
           -1 * (Math.pow(team.points - opp.points, options.standingPower) +
             options.rematchWeight * team.opponents.reduce((n, o) => {
               return n + (o === mapIds.get(opp.id))
-            }, 0))
+            }, 0) +
+            options.colorWeight * colorConflict(team, opp))
       ])
     }
     return arr
@@ -152,14 +162,49 @@ function getMatchups(options, round, participants, matches) {
     return standings.findIndex(s => s.id === mapIds.get(a)) -
       standings.findIndex(s => s.id === mapIds.get(b))
   })
+  var mappingById = new Map(mappings.map(m => [m.id, m]))
+  var assignColors = (iIdx, jIdx) => {
+    // BYE: active participant is always home
+    if (mapIds.get(jIdx) === null) return { home: mapIds.get(iIdx), away: null }
+    var iMap = mappingById.get(iIdx)
+    var jMap = mappingById.get(jIdx)
+    // Hard constraint: if last two colors are identical the player must switch
+    var iForced = iMap.lastTwoColors.length === 2 && iMap.lastTwoColors[0] === iMap.lastTwoColors[1]
+      ? (iMap.lastTwoColors[0] === 'home' ? 'away' : 'home')
+      : null
+    var jForced = jMap.lastTwoColors.length === 2 && jMap.lastTwoColors[0] === jMap.lastTwoColors[1]
+      ? (jMap.lastTwoColors[0] === 'home' ? 'away' : 'home')
+      : null
+    // If both forced to the same side, the player with larger |colorImbalance| wins
+    if (iForced && jForced && iForced === jForced) {
+      if (Math.abs(iMap.colorImbalance) >= Math.abs(jMap.colorImbalance)) {
+        jForced = null
+      } else {
+        iForced = null
+      }
+    }
+    if (iForced) return iForced === 'home'
+      ? { home: mapIds.get(iIdx), away: mapIds.get(jIdx) }
+      : { home: mapIds.get(jIdx), away: mapIds.get(iIdx) }
+    if (jForced) return jForced === 'home'
+      ? { home: mapIds.get(jIdx), away: mapIds.get(iIdx) }
+      : { home: mapIds.get(iIdx), away: mapIds.get(jIdx) }
+    // Soft preference: player due home gets home, player due away gets away
+    if (iMap.colorDue === 'home') return { home: mapIds.get(iIdx), away: mapIds.get(jIdx) }
+    if (iMap.colorDue === 'away') return { home: mapIds.get(jIdx), away: mapIds.get(iIdx) }
+    if (jMap.colorDue === 'home') return { home: mapIds.get(jIdx), away: mapIds.get(iIdx) }
+    if (jMap.colorDue === 'away') return { home: mapIds.get(iIdx), away: mapIds.get(jIdx) }
+    // Tie-break: lower-ranked player (higher standings index) gets home
+    var iRank = standings.findIndex(s => s.id === mapIds.get(iIdx))
+    var jRank = standings.findIndex(s => s.id === mapIds.get(jIdx))
+    return iRank > jRank
+      ? { home: mapIds.get(iIdx), away: mapIds.get(jIdx) }
+      : { home: mapIds.get(jIdx), away: mapIds.get(iIdx) }
+  }
   for(var i of sortedKeys) {
-    if(results[i] !== -1 && !matchups.reduce(
-      (n, r) => n || r.home === mapIds.get(results[i]),
-      false)) {
-      matchups.push({
-        home: mapIds.get(i),
-        away: mapIds.get(results[i])
-      })
+    if(results[i] !== -1 && !matchups.some(
+      r => r.home === mapIds.get(i) || r.away === mapIds.get(i))) {
+      matchups.push(assignColors(i, results[i]))
     }
   }
   return matchups
@@ -174,9 +219,11 @@ function getMappings(participants, matches) {
       if (match.home.id === participant.id) {
         acc.points += match.home.points
         acc.opponents.push(match.away.id)
+        acc.colorsPlayed.push('home')
       } else if (match.away.id === participant.id) {
         acc.points += match.away.points
         acc.opponents.push(match.home.id)
+        acc.colorsPlayed.push('away')
       }
       return acc
     }, {
@@ -184,7 +231,8 @@ function getMappings(participants, matches) {
       seed: participant.seed,
       droppedOut: participant.droppedOut,
       points: 0,
-      opponents: []
+      opponents: [],
+      colorsPlayed: []
     }))
     return acc
   }, [])
@@ -216,6 +264,7 @@ module.exports = (options) => {
   options.rematchWeight = options.rematchWeight || 100
   options.standingPower = options.standingPower || 2
   options.seedMultiplier = options.seedMultiplier || 6781
+  options.colorWeight = (options.colorWeight != null) ? options.colorWeight : 3
 
   return {
     getModifiedMedianScores: getModifiedMedianScores.bind(null, options),
