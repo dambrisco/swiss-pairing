@@ -98,6 +98,10 @@ function getMatchups(options, round, participants, matches) {
   for (var m of mappings) {
     mapIds.set(index, m.id)
     m.id = index++
+    var homesPlayed = m.colorsPlayed.filter(c => c === 'home').length
+    var awaysPlayed = m.colorsPlayed.filter(c => c === 'away').length
+    var colorImbalance = homesPlayed - awaysPlayed
+    m.colorDue = colorImbalance > 0 ? 'away' : colorImbalance < 0 ? 'home' : null
   }
 
   if(mappings.length % 2 === 1) {
@@ -120,6 +124,10 @@ function getMatchups(options, round, participants, matches) {
   // we shuffle the inputs to the blossom algorithm to counteract
   // any ordering biases it may have
   mappings = shuffle(mappings, round, options.seedMultiplier)
+  var colorConflict = (a, b) => {
+    if (!a.colorDue || !b.colorDue) return 0
+    return (a.colorDue === b.colorDue) ? 1 : 0
+  }
   var arr = mappings.reduce((arr, team, i, orig) => {
     var opps = orig.slice(0, i).concat(orig.slice(i + 1))
     for (var opp of opps) {
@@ -129,7 +137,8 @@ function getMatchups(options, round, participants, matches) {
           -1 * (Math.pow(team.points - opp.points, options.standingPower) +
             options.rematchWeight * team.opponents.reduce((n, o) => {
               return n + (o === mapIds.get(opp.id))
-            }, 0))
+            }, 0) +
+            options.colorWeight * colorConflict(team, opp))
       ])
     }
     return arr
