@@ -219,6 +219,7 @@ module.exports = (options) => {
   options.rematchWeight = options.rematchWeight || 100
   options.standingPower = options.standingPower || 2
   options.seedMultiplier = options.seedMultiplier || 6781
+  options.colorWeight = options.colorWeight || 3
 
   return {
     getModifiedMedianScores: getModifiedMedianScores.bind(null, options),
