@@ -119,8 +119,4 @@ Add test cases to `test/test.js` covering:
 
 Because the plan derives `colorsPlayed` from historical `home`/`away` fields, it assumes those fields were color-intent-aware from the start. For tournaments that recorded match results before this feature existed — where `home` was assigned purely by ranking with no color intent — the derived color history will be incorrect and early-round color assignments may be skewed until the balance self-corrects.
 
-**Mitigation options for the library owner to consider:**
-
-1. Accept this as a documented limitation for in-progress tournaments migrating to this version.
-2. Add an optional `colorOverride` field to the match input format (e.g., `home.color: 'home' | 'away'`) so callers can supply authoritative color data for pre-existing rounds, with `home`/`away` position used as the fallback.
-3. Document that reliable color tracking requires tournaments to be started fresh on this version or later.
+**Resolution:** Color tracking is only reliable for tournaments started fresh on this version or later. This will be documented as a known limitation. Tournaments that recorded match history before this version will have incorrect color history derived from their existing data, as `home` was assigned by ranking rather than color intent.
