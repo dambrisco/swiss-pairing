@@ -174,9 +174,11 @@ function getMappings(participants, matches) {
       if (match.home.id === participant.id) {
         acc.points += match.home.points
         acc.opponents.push(match.away.id)
+        acc.colorsPlayed.push('home')
       } else if (match.away.id === participant.id) {
         acc.points += match.away.points
         acc.opponents.push(match.home.id)
+        acc.colorsPlayed.push('away')
       }
       return acc
     }, {
@@ -184,7 +186,8 @@ function getMappings(participants, matches) {
       seed: participant.seed,
       droppedOut: participant.droppedOut,
       points: 0,
-      opponents: []
+      opponents: [],
+      colorsPlayed: []
     }))
     return acc
   }, [])

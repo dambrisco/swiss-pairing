@@ -232,3 +232,23 @@ if (oddMatchups.length !== 2) {
 if (evenMatchups.length !== 2) {
   throw new Error('getStandings incorrect for even data')
 }
+
+var evenMappings = onePerRound.getMappings(even.participants, even.matches)
+var expectedColorsPlayed = {
+  'ID 1': ['home', 'away'],
+  'ID 2': ['away', 'away'],
+  'ID 3': ['home', 'home'],
+  'ID 4': ['away', 'home']
+}
+evenMappings.forEach(mapping => {
+  var expected = expectedColorsPlayed[mapping.id]
+  if (!expected) {
+    throw new Error('getMappings returned unexpected participant id: ' + mapping.id)
+  }
+  if (mapping.colorsPlayed.length !== expected.length ||
+      !mapping.colorsPlayed.every((color, i) => color === expected[i])) {
+    throw new Error('getMappings colorsPlayed incorrect for ' + mapping.id +
+      ': expected ' + JSON.stringify(expected) +
+      ', got ' + JSON.stringify(mapping.colorsPlayed))
+  }
+})
